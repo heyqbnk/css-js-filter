@@ -1,4 +1,4 @@
-export type TProcessableImage = Uint8ClampedArray | number[];
+export type TProcessableImage = Uint8ClampedArray | ImageData | number[];
 export type TProcessableImageType = 'rgb' | 'rgba';
 
 export interface IApplyToSettings {
@@ -14,7 +14,7 @@ export interface IApplyToSettings {
    * value is not cloned and will be changed by reference. You should pass
    * true to make filter work faster because cloning entity will take some
    * time.
-   * @default false
+   * @default true
    */
   byRef?: boolean;
 }
@@ -27,20 +27,6 @@ export type TProcessImageFunc = <T extends TProcessableImage>(
   value: number,
   type: TProcessableImageType,
 ) => T;
-
-/**
- * Existing css filter function names.
- */
-export type TCSSFilterFunctionName =
-  | 'brightness'
-  | 'blur'
-  | 'contrast'
-  | 'grayscale'
-  | 'hueRotation'
-  | 'inversion'
-  | 'opacity'
-  | 'saturation'
-  | 'sepia';
 
 export interface ICSSFilter {
   /**

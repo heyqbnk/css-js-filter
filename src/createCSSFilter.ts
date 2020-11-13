@@ -66,18 +66,40 @@ export function createCSSFilter(
         : defaultValue === value;
     };
 
+  function applyTo(image: ImageData, value: number, settings?: IApplyToSettings): ImageData;
   function applyTo(image: Uint8ClampedArray, value: number, settings?: IApplyToSettings): Uint8ClampedArray;
   function applyTo(image: number[], value: number, settings?: IApplyToSettings): number[];
   function applyTo(image: TProcessableImage, value: number, settings: IApplyToSettings = {}): any {
-    const {byRef = false, type = 'rgba'} = settings;
+    const {byRef = true, type = 'rgba'} = settings;
+    let data = image instanceof ImageData
+      ? image.data
+      : image;
 
-    if (image.length % getBytesCount(type)) {
+    if (data.length % getBytesCount(type)) {
       throw new Error(
         'Entity is corrupted. Choose another entity type or check ' +
         'entity itself',
       );
     }
-    return processImage(byRef ? image : image.slice(0), value, type);
+    // In case, modify by reference is not needed, create data copy.
+    data = byRef ? data : data.slice(0);
+
+    // Process image data.
+    processImage(data, value, type);
+
+    if (image instanceof ImageData) {
+      if (byRef) {
+        return image;
+      }
+      return new ImageData(
+        data instanceof Uint8ClampedArray
+          ? data
+          : new Uint8ClampedArray(data),
+        image.width,
+        image.height,
+      );
+    }
+    return data;
   }
 
   class CSSFilter {

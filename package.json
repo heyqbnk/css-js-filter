@@ -18,7 +18,7 @@
     "commit": "git-cz",
     "release": "standard-version -a",
     "postrelease": "npm-run-all release:*",
-    "release:tags": "git push --follow-tags origin master & yarn publish --non-interactive",
+    "release:tags": "git push --follow-tags origin main & yarn publish --non-interactive",
     "release:github": "dotenv -e .env -- conventional-github-releaser -p eslint",
     "prepublishOnly": "yarn build"
   },
