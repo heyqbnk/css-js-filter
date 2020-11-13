@@ -1,7 +1,7 @@
 import {
   IApplyToSettings,
   ICSSFilter,
-  TProcessableImage,
+  TCSSFilterApplyToImage,
   TProcessImageFunc,
 } from './types';
 import {getBytesCount} from './utils';
@@ -69,7 +69,7 @@ export function createCSSFilter(
   function applyTo(image: ImageData, value: number, settings?: IApplyToSettings): ImageData;
   function applyTo(image: Uint8ClampedArray, value: number, settings?: IApplyToSettings): Uint8ClampedArray;
   function applyTo(image: number[], value: number, settings?: IApplyToSettings): number[];
-  function applyTo(image: TProcessableImage, value: number, settings: IApplyToSettings = {}): any {
+  function applyTo(image: TCSSFilterApplyToImage, value: number, settings: IApplyToSettings = {}): any {
     const {byRef = true, type = 'rgba'} = settings;
     let data = image instanceof ImageData
       ? image.data

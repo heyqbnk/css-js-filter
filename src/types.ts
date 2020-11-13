@@ -1,4 +1,5 @@
-export type TProcessableImage = Uint8ClampedArray | ImageData | number[];
+export type TProcessableImage = Uint8ClampedArray | number[];
+export type TCSSFilterApplyToImage = Uint8ClampedArray | ImageData | number[];
 export type TProcessableImageType = 'rgb' | 'rgba';
 
 export interface IApplyToSettings {
@@ -52,7 +53,7 @@ export interface ICSSFilter {
    * @param settings
    * @returns {T}
    */
-  applyTo<T extends TProcessableImage>(
+  applyTo<T extends TCSSFilterApplyToImage>(
     image: T,
     value: number,
     settings?: IApplyToSettings,

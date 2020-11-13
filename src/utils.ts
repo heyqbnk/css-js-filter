@@ -1,11 +1,4 @@
 import {TProcessableImage, TProcessableImageType} from './types';
-import {ColorsFilter} from './ColorsFilter';
-import {isNumber} from 'util';
-
-interface IForEachPixelMappersMap {
-  rgb: (r: number, g: number, b: number) => any;
-  rgba: (r: number, g: number, b: number, a: number) => any;
-}
 
 /**
  * Returns bytes count for specified pixel type.
