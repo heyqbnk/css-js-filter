@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [1.1.2](https://github.com/wolframdeus/css-js-filter/compare/v1.1.1...v1.1.2) (2020-11-13)
+
+
+### Bug Fixes
+
+* **types:** modify TProcessableImage ([1459fbb](https://github.com/wolframdeus/css-js-filter/commit/1459fbbb339ad92b98e2bdea686d9190f5ff0ea0))
+
 ### [1.1.1](https://github.com/wolframdeus/css-js-filter/compare/v1.1.0...v1.1.1) (2020-11-13)
 
 
