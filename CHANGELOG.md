@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [1.2.0](https://github.com/wolframdeus/css-js-filter/compare/v1.1.4...v1.2.0) (2020-11-14)
+
+
+### Features
+
+* **createcssfilter:** add an ability to use generic value types while creating filter ([a9e8c04](https://github.com/wolframdeus/css-js-filter/commit/a9e8c0403c85da787e05f0ff674c1c984f73cc0d))
+
 ### [1.1.4](https://github.com/wolframdeus/css-js-filter/compare/v1.1.3...v1.1.4) (2020-11-14)
 
 
