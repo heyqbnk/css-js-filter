@@ -18,11 +18,11 @@ npm i css-js-filter
 
 Each filter class contains realisation for both JS and CSS parts. So, if
 it is required to modify image directly (means modify its pixels), then JS
-part of filter should be used. In case when the only 1 thing which is 
-required from filter is to display what will happen, when we apply via JS,
-we could use filter's CSS part.
+part of filter should be used. In case when the only 1 required thing from 
+filter is to display what will happen, when we apply it via JS,we could use 
+filter's CSS part.
 
-#### JS
+#### JavaScript / TypeScript
 
 ```typescript
 import {BrightnessFilter} from 'css-js-filter';
@@ -33,7 +33,7 @@ const canvas = document.getElementById('canvas');
 // Get canvas context.
 const context = canvas.getContext('2d');
 
-// Get canvas image data.
+// Get canvas image data which should be modified.
 const imageData = context.getImageData(0, 0, canvas.width, canvas.height);
 
 // Decrease image brightness by 70%
@@ -70,14 +70,40 @@ const saturationFilter = SaturationFilter.getCSSFilter(23);
 // As a result, we are getting here value "brightness(30%) saturate(23%)".
 const cssFilter = [brightnessFilter, saturationFilter].join(' ');
 
-// Then, we should use created filter in canvas style (or any other element).
+// Then, we should use created filter in canvas style (or any other 
+// element).
 canvas.style.filter = cssFilter;
 
 // ...and, thats all!
 ```
 
+Moreover, created CSS filter is compatible with canvas context's filter 
+property. Nevertheless, context's filter is not supported by some browsers.
+
+```typescript
+import {BrightnessFilter, SaturationFilter} from 'css-js-filter';
+
+const canvas = document.getElementById('canvas');
+const context = canvas.getContext('2d');
+
+// Get filter CSS representation.
+const brightnessFilter = BrightnessFilter.getCSSFilter(30);
+const saturationFilter = SaturationFilter.getCSSFilter(23);
+
+// As a result, we are getting here value "brightness(30%) saturate(23%)".
+const cssFilter = [brightnessFilter, saturationFilter].join(' ');
+context.filter = cssFilter;
+
+// Then, we should draw image or some another primitive. Pay attention to the 
+// moment, that we are not using putImageData due to this method avoids all
+// modifications and replaces pixels directly.
+const image = new Image();
+image.src = '...';
+image.onload = () => context.drawImage(image, 0, 0);
+```
+
 Of course, you could use those filters not only for canvas but the other
-html elements. It only generates a string, compatible for CSS's filter
+html elements. It only generates a string, compatible with CSS's filter
 property.
 
 ### Advanced

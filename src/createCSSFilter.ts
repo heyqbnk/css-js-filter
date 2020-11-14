@@ -83,7 +83,7 @@ export function createCSSFilter<V = TCSSFilterDefaultValue>(
   function applyTo(image: Uint8ClampedArray, value: V, settings?: IApplyToSettings): Uint8ClampedArray;
   function applyTo(image: number[], value: V, settings?: IApplyToSettings): number[];
   function applyTo(image: TCSSFilterApplyToImage, value: V, settings: IApplyToSettings = {}): any {
-    const {byRef = true, type = 'rgba'} = settings;
+    const {type = 'rgba'} = settings;
     let data = image instanceof ImageData
       ? image.data
       : image;
@@ -94,25 +94,11 @@ export function createCSSFilter<V = TCSSFilterDefaultValue>(
         'entity itself',
       );
     }
-    // In case, modify by reference is not needed, create data copy.
-    data = byRef ? data : data.slice(0);
 
     // Process image data.
     processImage(data, value, type);
 
-    if (image instanceof ImageData) {
-      if (byRef) {
-        return image;
-      }
-      return new ImageData(
-        data instanceof Uint8ClampedArray
-          ? data
-          : new Uint8ClampedArray(data),
-        image.width,
-        image.height,
-      );
-    }
-    return data;
+    return image;
   }
 
   class CSSFilter {

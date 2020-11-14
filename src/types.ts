@@ -10,14 +10,6 @@ export interface IApplyToSettings {
    * @default 'rgba'
    */
   type?: TProcessableImageType;
-  /**
-   * Should processor modify entity by its reference. If true, entity
-   * value is not cloned and will be changed by reference. You should pass
-   * true to make filter work faster because cloning entity will take some
-   * time.
-   * @default true
-   */
-  byRef?: boolean;
 }
 
 /**
