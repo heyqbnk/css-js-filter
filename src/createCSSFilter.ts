@@ -1,28 +1,28 @@
 import {
   IApplyToSettings,
   ICSSFilter,
-  TCSSFilterApplyToImage,
+  TCSSFilterApplyToImage, TCSSFilterDefaultValue,
   TProcessImageFunc,
 } from './types';
 import {getBytesCount} from './utils';
 
-type TDefaultValue = {
+type TDefaultValueMixin<V = TCSSFilterDefaultValue> = {
   /**
    * Default value or values for this filter. For example, if its brightness
    * filter, default value is 100 because by default images has 100%
    * brightness.
    */
-  defaultValue: number | number[];
+  defaultValue: V;
 } | {
   /**
    * Overrides isDefault method.
-   * @param {number} value
+   * @param {V} value
    * @returns {boolean}
    */
-  isDefault(value: number): boolean;
+  isDefault(value: V): boolean;
 }
 
-type TGetCSSFilter = {
+type TGetCSSFilter<V = TCSSFilterDefaultValue> = {
   /**
    * CSS filter function name. For example: hue-rotate, contrast
    * brightness, etc.
@@ -38,13 +38,15 @@ type TGetCSSFilter = {
   /**
    * Returns CSS filter text representation, which could be used as
    * CSS's filter property.
-   * @param {string} value
+   * @param {V} value
    * @returns {string}
    */
-  getCSSFilter(value: number): string;
+  getCSSFilter(value: V): string;
 }
 
-type TOptions = TDefaultValue & TGetCSSFilter & {
+type TOptions<V = TCSSFilterDefaultValue> = TDefaultValueMixin<V>
+  & TGetCSSFilter<V>
+  & {
   /**
    * Filter class name.
    */
@@ -53,7 +55,7 @@ type TOptions = TDefaultValue & TGetCSSFilter & {
   /**
    * Function which processes image pixels and applies filter logic.
    */
-  processImage: TProcessImageFunc;
+  processImage: TProcessImageFunc<V>;
 };
 
 /**
@@ -61,32 +63,26 @@ type TOptions = TDefaultValue & TGetCSSFilter & {
  * @param {IOptions} options
  * @returns {ICSSFilter}
  */
-export function createCSSFilter(
-  options: TOptions,
-): ICSSFilter {
+export function createCSSFilter<V = TCSSFilterDefaultValue>(
+  options: TOptions<V>,
+): ICSSFilter<V> {
   const {name, processImage} = options;
 
   const getCSSFilter = 'getCSSFilter' in options
     ? options.getCSSFilter
-    : (value: number) => {
+    : (value: V) => {
       const {cssFunctionName, cssFunctionValuePostfix} = options;
 
       return `${cssFunctionName}(${value}${cssFunctionValuePostfix})`;
     };
   const isDefault = 'isDefault' in options
     ? options.isDefault
-    : (value: number) => {
-      const {defaultValue} = options;
+    : (value: V) => options.defaultValue === value;
 
-      return Array.isArray(defaultValue)
-        ? defaultValue.includes(value)
-        : defaultValue === value;
-    };
-
-  function applyTo(image: ImageData, value: number, settings?: IApplyToSettings): ImageData;
-  function applyTo(image: Uint8ClampedArray, value: number, settings?: IApplyToSettings): Uint8ClampedArray;
-  function applyTo(image: number[], value: number, settings?: IApplyToSettings): number[];
-  function applyTo(image: TCSSFilterApplyToImage, value: number, settings: IApplyToSettings = {}): any {
+  function applyTo(image: ImageData, value: V, settings?: IApplyToSettings): ImageData;
+  function applyTo(image: Uint8ClampedArray, value: V, settings?: IApplyToSettings): Uint8ClampedArray;
+  function applyTo(image: number[], value: V, settings?: IApplyToSettings): number[];
+  function applyTo(image: TCSSFilterApplyToImage, value: V, settings: IApplyToSettings = {}): any {
     const {byRef = true, type = 'rgba'} = settings;
     let data = image instanceof ImageData
       ? image.data

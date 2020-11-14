@@ -23,27 +23,35 @@ export interface IApplyToSettings {
 /**
  * Function which applies filter to image.
  */
-export type TProcessImageFunc = <T extends TProcessableImage>(
-  image: T,
-  value: number,
-  type: TProcessableImageType,
-) => T;
+export type TProcessImageFunc<V = TCSSFilterDefaultValue> =
+  <T extends TProcessableImage>(
+    image: T,
+    value: V,
+    type: TProcessableImageType,
+  ) => T;
 
-export interface ICSSFilter {
+/**
+ * CSS filter default value default type.
+ */
+export type TCSSFilterDefaultValue = number;
+
+export interface ICSSFilter<V = TCSSFilterDefaultValue> {
   /**
    * Returns CSS filter function applied to passed value. As a result,
    * it should return something like "brightness(50%)". So, it could be used
    * in CSS's "filter" property.
-   * @param {number} value
+   * @param {V} value
    * @returns {string}
    */
-  getCSSFilter(value: number): string;
+  getCSSFilter(value: V): string;
+
   /**
    * States if passed value is default for this filter.
-   * @param {number} value
+   * @param {V} value
    * @returns {boolean}
    */
-  isDefault(value: number): boolean;
+  isDefault(value: V): boolean;
+
   /**
    * Applies filter to pixel or set of RGB/RGBA pixels. To make it more
    * @param image
@@ -53,7 +61,7 @@ export interface ICSSFilter {
    */
   applyTo<T extends TCSSFilterApplyToImage>(
     image: T,
-    value: number,
+    value: V,
     settings?: IApplyToSettings,
   ): T;
 }
