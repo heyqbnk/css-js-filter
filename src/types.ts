@@ -38,14 +38,12 @@ export interface ICSSFilter {
    * @returns {string}
    */
   getCSSFilter(value: number): string;
-
   /**
    * States if passed value is default for this filter.
    * @param {number} value
    * @returns {boolean}
    */
   isDefault(value: number): boolean;
-
   /**
    * Applies filter to pixel or set of RGB/RGBA pixels. To make it more
    * @param image

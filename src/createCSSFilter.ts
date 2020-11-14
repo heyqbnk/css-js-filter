@@ -6,29 +6,7 @@ import {
 } from './types';
 import {getBytesCount} from './utils';
 
-type TOptions = {
-  /**
-   * Filter class name.
-   */
-  name?: string;
-
-  /**
-   * CSS filter function name. For example: hue-rotate, contrast
-   * brightness, etc.
-   */
-  cssFunctionName: string;
-
-  /**
-   * Text which is passed right after intensity. They could be
-   * "%", "deg" or "px".
-   */
-  cssFunctionValuePostfix?: string;
-
-  /**
-   * Function which processes image pixels and applies filter logic.
-   */
-  processImage: TProcessImageFunc;
-} & ({
+type TDefaultValue = {
   /**
    * Default value or values for this filter. For example, if its brightness
    * filter, default value is 100 because by default images has 100%
@@ -42,7 +20,41 @@ type TOptions = {
    * @returns {boolean}
    */
   isDefault(value: number): boolean;
-})
+}
+
+type TGetCSSFilter = {
+  /**
+   * CSS filter function name. For example: hue-rotate, contrast
+   * brightness, etc.
+   */
+  cssFunctionName: string;
+
+  /**
+   * Text which is passed right after intensity. They could be
+   * "%", "deg" or "px".
+   */
+  cssFunctionValuePostfix?: string;
+} & {
+  /**
+   * Returns CSS filter text representation, which could be used as
+   * CSS's filter property.
+   * @param {string} value
+   * @returns {string}
+   */
+  getCSSFilter(value: number): string;
+}
+
+type TOptions = TDefaultValue & TGetCSSFilter & {
+  /**
+   * Filter class name.
+   */
+  name?: string;
+
+  /**
+   * Function which processes image pixels and applies filter logic.
+   */
+  processImage: TProcessImageFunc;
+};
 
 /**
  * Creates CSS filter.
@@ -56,6 +68,11 @@ export function createCSSFilter(
     name, cssFunctionName, cssFunctionValuePostfix, processImage,
   } = options;
 
+  const getCSSFilter = 'getCSSFilter' in options
+    ? options.getCSSFilter
+    : (value: number) => {
+      return `${cssFunctionName}(${value}${cssFunctionValuePostfix})`;
+    };
   const isDefault = 'isDefault' in options
     ? options.isDefault
     : (value: number) => {
@@ -104,12 +121,8 @@ export function createCSSFilter(
 
   class CSSFilter {
     static applyTo = applyTo;
-
+    static getCSSFilter = getCSSFilter;
     static isDefault = isDefault;
-
-    static getCSSFilter(value: number): string {
-      return `${cssFunctionName}(${value}${cssFunctionValuePostfix})`;
-    }
   }
 
   if (typeof name === 'string') {
