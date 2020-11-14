@@ -34,7 +34,7 @@ type TGetCSSFilter = {
    * "%", "deg" or "px".
    */
   cssFunctionValuePostfix?: string;
-} & {
+} | {
   /**
    * Returns CSS filter text representation, which could be used as
    * CSS's filter property.
@@ -64,13 +64,13 @@ type TOptions = TDefaultValue & TGetCSSFilter & {
 export function createCSSFilter(
   options: TOptions,
 ): ICSSFilter {
-  const {
-    name, cssFunctionName, cssFunctionValuePostfix, processImage,
-  } = options;
+  const {name, processImage} = options;
 
   const getCSSFilter = 'getCSSFilter' in options
     ? options.getCSSFilter
     : (value: number) => {
+      const {cssFunctionName, cssFunctionValuePostfix} = options;
+
       return `${cssFunctionName}(${value}${cssFunctionValuePostfix})`;
     };
   const isDefault = 'isDefault' in options
