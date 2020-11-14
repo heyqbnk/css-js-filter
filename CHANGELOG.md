@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [1.1.4](https://github.com/wolframdeus/css-js-filter/compare/v1.1.3...v1.1.4) (2020-11-14)
+
+
+### Bug Fixes
+
+* **createcssfilter:** separate getCSSFilter and static css function fields ([5856843](https://github.com/wolframdeus/css-js-filter/commit/5856843fc7769bf7280494ffc5bd1a13599a444d))
+
 ### [1.1.3](https://github.com/wolframdeus/css-js-filter/compare/v1.1.2...v1.1.3) (2020-11-14)
 
 
