@@ -2,6 +2,15 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [1.3.0](https://github.com/wolframdeus/css-js-filter/compare/v1.2.3...v1.3.0) (2020-11-15)
+
+
+### Features
+
+* **filters:** add blur filter. Apply to now accepts only ImageData ([af487d3](https://github.com/wolframdeus/css-js-filter/commit/af487d36a2c0408526c74c3432a25409b2de67a1))
+* **filters:** add InversionFilter filter ([4578cbf](https://github.com/wolframdeus/css-js-filter/commit/4578cbfd8170905eb9715575a54af36c2b6c6ae8))
+* **filters:** add OpacityFilter and make applyTo settings required ([fd008fe](https://github.com/wolframdeus/css-js-filter/commit/fd008feb35dafc790b697a54269a7c9d3056ae98))
+
 ### [1.2.3](https://github.com/wolframdeus/css-js-filter/compare/v1.2.2...v1.2.3) (2020-11-15)
 
 ### [1.2.2](https://github.com/wolframdeus/css-js-filter/compare/v1.2.1...v1.2.2) (2020-11-14)
