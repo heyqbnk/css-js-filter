@@ -1,0 +1,45 @@
+<html>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+    <link rel="stylesheet" type="text/css" href="styles.css"/>
+</head>
+<body>
+<div class="intro">
+    Here is a library filters preview. <br/>
+    <br/>
+    CSS canvas shows how browser's
+    filter property works. Library generates this property and applies to
+    canvas.<br/>
+    <br/>
+    JS canvas shows JS part of filters. They are transforming image and
+    as a result, you get modified image. So, in CSS case, canvas will not
+    really update image, it only applies filter to some area of browser
+    window (e.g element), but JS really does it.<br/>
+    <br/>
+    As you can see, JS canvas updates only after input was changed (onchange
+    called), but CSS canvas is updating while you are sliding the thumb (oninput
+    called). The reason is there will be some stutters while updating
+    canvas with JS, due to some images have really a lot of pixels and
+    transformation will take some time, so you will see the stutters.<br/>
+    <br/>
+    In production, it is recommended to apply CSS filters first if you want to
+    show what will happen, when you apply filter and then, when you want to
+    download image, you have to apply JS part.
+</div>
+<div class="canvas__container">
+    <div class="canvas__type">CSS</div>
+    <canvas id="css-canvas"></canvas>
+</div>
+<div id="filters">
+</div>
+<div class="canvas__container">
+    <div class="canvas__type">JS</div>
+    <canvas id="js-canvas"></canvas>
+</div>
+<script type="text/javascript" src="index.js"></script>
+</body>
+</html>

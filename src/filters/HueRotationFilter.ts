@@ -9,7 +9,7 @@ export const HueRotationFilter = createCSSFilter({
   name: 'HueRotationFilter',
   processImage(image, angle, type) {
     forEachPixel(image, type, ((i, r, g, b) => {
-      assignPixel(image, i, ColorsFilter.hueRotation(r, g, b, angle));
+      assignPixel(image, i, ColorsFilter.hueRotation(r, g, b, angle / 360));
     }));
 
     return image;

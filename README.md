@@ -155,6 +155,7 @@ const Inst1977CSSFilter = createCSSFilter({
     forEachPixel(image, type, ((i, r, g, b) => {
       // Apply all of the filters to pixel.
       filters.forEach(([Filter, value]) => {
+        // NOTE: To be replaced in near future. 
         assignPixel(image, i, Filter.applyTo([r, g, b], value * intensity));
       });
     }));
