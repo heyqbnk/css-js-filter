@@ -8,8 +8,10 @@ export const BrightnessFilter = createCSSFilter({
   defaultValue: 100,
   name: 'BrightnessFilter',
   processImage(image, amount, type) {
+    const multiplier = amount / 100;
+
     forEachPixel(image, type, ((i, r, g, b) => {
-      assignPixel(image, i, ColorsFilter.brighten(r, g, b, amount / 100));
+      assignPixel(image, i, ColorsFilter.brighten(r, g, b, multiplier));
     }));
 
     return image;

@@ -46,6 +46,7 @@ function redraw(canvas: HTMLCanvasElement, type: 'css' | 'js') {
       if (Filter.isDefault(value)) {
         return;
       }
+      console.log('Applying')
       Filter.applyTo(imageData, value, {type: 'rgba'});
     });
     context.putImageData(imageData, 0, 0);

@@ -1,5 +1,11 @@
 import {TProcessableImage, TProcessableImageType} from './types';
 
+type TRGBAComponent = number;
+type TR = TRGBAComponent;
+type TG = TRGBAComponent;
+type TB = TRGBAComponent;
+type TA = TRGBAComponent;
+
 /**
  * Returns bytes count for specified pixel type.
  * @param {TProcessableImageType} type
@@ -8,12 +14,6 @@ import {TProcessableImage, TProcessableImageType} from './types';
 export function getBytesCount(type: TProcessableImageType): number {
   return type === 'rgb' ? 3 : 4;
 }
-
-type TRGBAComponent = number;
-type TR = TRGBAComponent;
-type TG = TRGBAComponent;
-type TB = TRGBAComponent;
-type TA = TRGBAComponent;
 
 /**
  * Applies function f to each pixel of image.

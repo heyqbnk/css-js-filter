@@ -8,8 +8,10 @@ export const SepiaFilter = createCSSFilter({
   defaultValue: 0,
   name: 'SepiaFilter',
   processImage(image, amount, type) {
+    const multiplier = amount / 100;
+
     forEachPixel(image, type, ((i, r, g, b) => {
-      assignPixel(image, i, ColorsFilter.sepia(r, g, b, amount / 100));
+      assignPixel(image, i, ColorsFilter.sepia(r, g, b, multiplier));
     }));
 
     return image;

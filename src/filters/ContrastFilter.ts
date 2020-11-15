@@ -8,8 +8,10 @@ export const ContrastFilter = createCSSFilter({
   defaultValue: 100,
   name: 'ContrastFilter',
   processImage(image, amount, type) {
+    const multiplier = amount / 100;
+
     forEachPixel(image, type, ((i, r, g, b) => {
-      assignPixel(image, i, ColorsFilter.contrast(r, g, b, amount / 100));
+      assignPixel(image, i, ColorsFilter.contrast(r, g, b, multiplier));
     }));
 
     return image;

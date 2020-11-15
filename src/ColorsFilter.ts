@@ -59,7 +59,7 @@ export class ColorsFilter {
    * @param {number} r
    * @param {number} g
    * @param {number} b
-   * @param {number} amount
+   * @param amount
    * @returns {[number, number, number]}
    */
   static hueRotation(
@@ -79,29 +79,29 @@ export class ColorsFilter {
    * @param {number} r
    * @param {number} g
    * @param {number} b
-   * @param {number} angle
+   * @param amount
    * @returns {[number, number, number]}
    */
   static hueRotationBrowser(
     r: number,
     g: number,
     b: number,
-    angle: number,
+    amount: number,
   ): [number, number, number] {
     const matrix = [
       1, 0, 0,
       0, 1, 0,
       0, 0, 1,
     ];
-    // Форматируем угол.
-    angle = (angle % 360 + 360) % 360;
+    // Format angle.
+    const angle = amount * 360;
 
-    // Коэффициенты для яркости.
+    // Coefficients for luminosity.
     const lumR = 0.2126;
     const lumG = 0.7152;
     const lumB = 0.0722;
 
-    // Коэффициенты поворота оттенка.
+    // Coefficients for hue rotation.
     const hueRotateR = 0.143;
     const hueRotateG = 0.140;
     const hueRotateB = 0.283;
