@@ -270,4 +270,42 @@ export class ColorsFilter {
   static opacify(a: number, multiplier: number): number {
     return this.adjustComponent(a * multiplier);
   }
+
+  /**
+   * Inverts pixel component.
+   * @param {number} component
+   * @param {number} multiplier
+   * @returns {number}
+   * @private
+   */
+  private static invertComponent(
+    component: number,
+    multiplier: number
+  ): number {
+    const targetValue = 255 - component;
+    const diff = targetValue - component;
+
+    return this.adjustComponent(component + diff * multiplier);
+  }
+
+  /**
+   * Inverts pixel.
+   * @param {number} r
+   * @param {number} g
+   * @param {number} b
+   * @param {number} multiplier
+   * @returns {[number, number, number]}
+   */
+  static invert(
+    r: number,
+    g: number,
+    b: number,
+    multiplier: number,
+  ): [number, number, number] {
+    return [
+      this.invertComponent(r, multiplier),
+      this.invertComponent(g, multiplier),
+      this.invertComponent(b, multiplier),
+    ];
+  }
 }

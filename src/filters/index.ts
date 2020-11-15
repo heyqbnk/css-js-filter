@@ -3,5 +3,7 @@ export * from './ContrastFilter';
 export * from './GrayscaleFilter';
 export * from './HueRotationBrowserFilter';
 export * from './HueRotationFilter';
+export * from './InversionFilter';
+export * from './OpacityFilter';
 export * from './SaturationFilter';
 export * from './SepiaFilter';

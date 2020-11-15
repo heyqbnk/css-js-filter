@@ -8,8 +8,9 @@ import {
   HueRotationBrowserFilter,
   HueRotationFilter,
   GrayscaleFilter,
+  OpacityFilter,
+  InversionFilter,
 } from '../../src';
-import {OpacityFilter} from '../../src/filters/OpacityFilter';
 
 type TTitle = string;
 type TMin = number;
@@ -24,6 +25,7 @@ const filters: [ICSSFilter, TTitle, TMin, TMax, TValue][] = [
   [HueRotationFilter, 'Hue rotation (original)', 0, 360, 0],
   [GrayscaleFilter, 'Grayscale', 0, 100, 0],
   [OpacityFilter, 'Opacity', 0, 100, 100],
+  [InversionFilter, 'Inversion', 0, 100, 0],
 ];
 
 /**
@@ -46,7 +48,6 @@ function redraw(canvas: HTMLCanvasElement, type: 'css' | 'js') {
       if (Filter.isDefault(value)) {
         return;
       }
-      console.log('Applying')
       Filter.applyTo(imageData, value, {type: 'rgba'});
     });
     context.putImageData(imageData, 0, 0);
