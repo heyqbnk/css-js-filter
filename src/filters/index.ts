@@ -1,3 +1,4 @@
+export * from './BlurFilter';
 export * from './BrightnessFilter';
 export * from './ContrastFilter';
 export * from './GrayscaleFilter';

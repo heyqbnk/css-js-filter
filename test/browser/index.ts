@@ -10,6 +10,7 @@ import {
   GrayscaleFilter,
   OpacityFilter,
   InversionFilter,
+  BlurFilter,
 } from '../../src';
 
 type TTitle = string;
@@ -26,6 +27,7 @@ const filters: [ICSSFilter, TTitle, TMin, TMax, TValue][] = [
   [GrayscaleFilter, 'Grayscale', 0, 100, 0],
   [OpacityFilter, 'Opacity', 0, 100, 100],
   [InversionFilter, 'Inversion', 0, 100, 0],
+  [BlurFilter, 'Blur', 0, 100, 0],
 ];
 
 /**

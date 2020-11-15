@@ -1,7 +1,7 @@
 import {
   IApplyToSettings,
   ICSSFilter,
-  TCSSFilterApplyToImage, TCSSFilterDefaultValue, TProcessableImageType,
+  TCSSFilterDefaultValue, TProcessableImageType,
   TProcessImageFunc,
 } from './types';
 import {getBytesCount} from './utils';
@@ -81,16 +81,10 @@ export function createCSSFilter<Value = TCSSFilterDefaultValue,
     ? options.isDefault
     : (value: Value) => options.defaultValue === value;
 
-  function applyTo(image: ImageData, value: Value, settings: IApplyToSettings<ImageType>): ImageData;
-  function applyTo(image: Uint8ClampedArray, value: Value, settings: IApplyToSettings<ImageType>): Uint8ClampedArray;
-  function applyTo(image: number[], value: Value, settings: IApplyToSettings<ImageType>): number[];
-  function applyTo(image: TCSSFilterApplyToImage, value: Value, settings: IApplyToSettings<ImageType>): any {
+  function applyTo(image: ImageData, value: Value, settings: IApplyToSettings<ImageType>): ImageData {
     const {type} = settings;
-    let data = image instanceof ImageData
-      ? image.data
-      : image;
 
-    if (data.length % getBytesCount(type)) {
+    if (image.data.length % getBytesCount(type)) {
       throw new Error(
         'Entity is corrupted. Choose another entity type or check ' +
         'entity itself',
@@ -98,7 +92,7 @@ export function createCSSFilter<Value = TCSSFilterDefaultValue,
     }
 
     // Process image data.
-    processImage(data, value, type);
+    processImage(image, value, type);
 
     return image;
   }

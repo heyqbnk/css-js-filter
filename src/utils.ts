@@ -1,4 +1,4 @@
-import {TProcessableImage, TProcessableImageType} from './types';
+import {TProcessableImageType} from './types';
 
 type TRGBAComponent = number;
 type TR = TRGBAComponent;
@@ -17,39 +17,40 @@ export function getBytesCount(type: TProcessableImageType): number {
 
 /**
  * Applies function f to each pixel of image.
- * @param {TProcessableImage} image
+ * @param {ImageData} image
  * @param {"rgb"} type
  * @param {(r: number, g: number, b: number) => any} f
  */
 export function forEachPixel(
-  image: TProcessableImage,
+  image: ImageData,
   type: 'rgb',
   f: (index: number, r: TR, g: TG, b: TB) => any,
 ): void;
 export function forEachPixel(
-  image: TProcessableImage,
+  image: ImageData,
   type: 'rgba',
   f: (index: number, r: TR, g: TG, b: TB, a: TA) => any,
 ): void;
 export function forEachPixel(
-  image: TProcessableImage,
+  image: ImageData,
   type: TProcessableImageType,
   f: (index: number, r: TR, g: TG, b: TB) => any,
 ): void;
 export function forEachPixel(
-  image: TProcessableImage,
+  image: ImageData,
   type: TProcessableImageType,
   f: (index: number, ...args: any[]) => any,
 ) {
+  const {data} = image;
   const bytesCount = getBytesCount(type);
 
-  for (let i = 0; i < image.length; i += bytesCount) {
-    const r = image[i];
-    const g = image[i + 1];
-    const b = image[i + 2];
+  for (let i = 0; i < data.length; i += bytesCount) {
+    const r = data[i];
+    const g = data[i + 1];
+    const b = data[i + 2];
 
     if (type === 'rgba') {
-      const a = image[i + 3];
+      const a = data[i + 3];
 
       f.call(f, i, r, g, b, a);
     } else {
@@ -60,16 +61,16 @@ export function forEachPixel(
 
 /**
  * Changes pixel in image.
- * @param {TProcessableImage} image
+ * @param {ImageData} image
  * @param {number} from
  * @param {number[]} components
  */
 export function assignPixel(
-  image: TProcessableImage,
+  image: ImageData,
   from: number,
   components: number[]
 ) {
   for (let i = 0; i < components.length; i++) {
-    image[from + i] = components[i];
+    image.data[from + i] = components[i];
   }
 }

@@ -1,5 +1,5 @@
 Arguments: 
-  /Users/v.kibenko/.nvm/versions/node/v12.16.1/bin/node /usr/local/Cellar/yarn/1.22.4/libexec/bin/yarn.js commit
+  /Users/v.kibenko/.nvm/versions/node/v12.16.1/bin/node /usr/local/Cellar/yarn/1.22.4/libexec/bin/yarn.js add --dev @types/stackblur-canvas
 
 PATH: 
   /Users/v.kibenko/.nvm/versions/node/v12.16.1/bin:/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin:/Applications/Postgres.app/Contents/Versions/latest/bin
@@ -14,17 +14,22 @@ Platform:
   darwin x64
 
 Trace: 
-  SyntaxError: /Users/v.kibenko/WebstormProjects/css-js-filter/package.json: Unexpected token } in JSON at position 781
-      at JSON.parse (<anonymous>)
-      at /usr/local/Cellar/yarn/1.22.4/libexec/lib/cli.js:1625:59
-      at Generator.next (<anonymous>)
-      at step (/usr/local/Cellar/yarn/1.22.4/libexec/lib/cli.js:310:30)
-      at /usr/local/Cellar/yarn/1.22.4/libexec/lib/cli.js:321:13
+  Error: https://registry.yarnpkg.com/@types%2fstackblur-canvas: Not found
+      at Request.params.callback [as _callback] (/usr/local/Cellar/yarn/1.22.4/libexec/lib/cli.js:66987:18)
+      at Request.self.callback (/usr/local/Cellar/yarn/1.22.4/libexec/lib/cli.js:140748:22)
+      at Request.emit (events.js:311:20)
+      at Request.<anonymous> (/usr/local/Cellar/yarn/1.22.4/libexec/lib/cli.js:141720:10)
+      at Request.emit (events.js:311:20)
+      at IncomingMessage.<anonymous> (/usr/local/Cellar/yarn/1.22.4/libexec/lib/cli.js:141642:12)
+      at Object.onceWrapper (events.js:417:28)
+      at IncomingMessage.emit (events.js:323:22)
+      at endReadableNT (_stream_readable.js:1204:12)
+      at processTicksAndRejections (internal/process/task_queues.js:84:21)
 
 npm manifest: 
   {
     "name": "css-js-filter",
-    "version": "1.1.4",
+    "version": "1.2.3",
     "repository": "https://github.com/wolframdeus/css-js-filter.git",
     "author": "Vladislav Kibenko <wolframdeus@gmail.com>",
     "license": "MIT",
@@ -34,7 +39,7 @@ npm manifest:
       "dist/**/*"
     ],
     "scripts": {
-      "dev:browser": "webpack-dev-server",
+      "dev:browser": "webpack serve",
       "build": "gulp",
       "test": "tsc --noEmit",
       "lint": "eslint src/**",
@@ -44,7 +49,7 @@ npm manifest:
       "prerelease": "yarn build",
       "postrelease": "npm-run-all release:*",
       "release:tags": "git push --follow-tags origin main & yarn publish --non-interactive",
-      "release:github": "dotenv -e .env -- conventional-github-releaser -p eslint",
+      "release:github": "dotenv -e .env -- conventional-github-releaser -p eslint"
     },
     "devDependencies": {
       "@babel/core": "^7.10.3",
@@ -75,6 +80,7 @@ npm manifest:
       "ts-loader": "^8.0.9",
       "ts-node": "^9.0.0",
       "typescript": "^4.0.5",
+      "url-loader": "^4.1.1",
       "webpack": "^5.4.0",
       "webpack-cli": "^4.2.0",
       "webpack-dev-server": "^3.11.0"
@@ -94,6 +100,9 @@ npm manifest:
       "src/**/*.ts": [
         "eslint --fix"
       ]
+    },
+    "dependencies": {
+      "stackblur-canvas": "^2.4.0"
     }
   }
 
@@ -5282,6 +5291,15 @@ Lockfile:
       emojis-list "^3.0.0"
       json5 "^1.0.1"
   
+  loader-utils@^2.0.0:
+    version "2.0.0"
+    resolved "https://registry.yarnpkg.com/loader-utils/-/loader-utils-2.0.0.tgz#e4cace5b816d425a166b5f097e10cd12b36064b0"
+    integrity sha512-rP4F0h2RaWSvPEkD7BLDFQnvSf+nK+wr3ESUjNTyAGobqrijmW92zc+SO6d4p4B1wh7+B/Jg1mkQe5NYUEHtHQ==
+    dependencies:
+      big.js "^5.2.2"
+      emojis-list "^3.0.0"
+      json5 "^2.1.2"
+  
   locate-path@^2.0.0:
     version "2.0.0"
     resolved "https://registry.yarnpkg.com/locate-path/-/locate-path-2.0.0.tgz#2b568b265eec944c6d9c0de9c3dbbbca0354cd8e"
@@ -7385,6 +7403,11 @@ Lockfile:
     resolved "https://registry.yarnpkg.com/stack-trace/-/stack-trace-0.0.10.tgz#547c70b347e8d32b4e108ea1a2a159e5fdde19c0"
     integrity sha1-VHxws0fo0ytOEI6hoqFZ5f3eGcA=
   
+  stackblur-canvas@^2.4.0:
+    version "2.4.0"
+    resolved "https://registry.yarnpkg.com/stackblur-canvas/-/stackblur-canvas-2.4.0.tgz#2b2eba910cb46f6feae918e1c402f863d602c01b"
+    integrity sha512-Z+HixfgYV0ss3C342DxPwc+UvN1SYWqoz7Wsi3xEDWEnaBkSCL3Ey21gF4io+WlLm8/RIrSnCrDBIEcH4O+q5Q==
+  
   standard-version@^9.0.0:
     version "9.0.0"
     resolved "https://registry.yarnpkg.com/standard-version/-/standard-version-9.0.0.tgz#814055add91eec8679a773768927f927183fc818"
@@ -8059,6 +8082,15 @@ Lockfile:
     version "0.1.0"
     resolved "https://registry.yarnpkg.com/urix/-/urix-0.1.0.tgz#da937f7a62e21fec1fd18d49b35c2935067a6c72"
     integrity sha1-2pN/emLiH+wf0Y1Js1wpNQZ6bHI=
+  
+  url-loader@^4.1.1:
+    version "4.1.1"
+    resolved "https://registry.yarnpkg.com/url-loader/-/url-loader-4.1.1.tgz#28505e905cae158cf07c92ca622d7f237e70a4e2"
+    integrity sha512-3BTV812+AVHHOJQO8O5MkWgZ5aosP7GnROJwvzLS9hWDj00lZ6Z0wNak423Lp9PBZN05N+Jk/N5Si8jRAlGyWA==
+    dependencies:
+      loader-utils "^2.0.0"
+      mime-types "^2.1.27"
+      schema-utils "^3.0.0"
   
   url-parse-lax@^3.0.0:
     version "3.0.0"

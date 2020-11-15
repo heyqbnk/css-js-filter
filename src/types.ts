@@ -1,5 +1,3 @@
-export type TProcessableImage = Uint8ClampedArray | number[];
-export type TCSSFilterApplyToImage = Uint8ClampedArray | ImageData | number[];
 export type TProcessableImageType = 'rgb' | 'rgba';
 
 export interface IApplyToSettings<Type extends TProcessableImageType = TProcessableImageType> {
@@ -16,11 +14,11 @@ export interface IApplyToSettings<Type extends TProcessableImageType = TProcessa
  */
 export type TProcessImageFunc<Value = TCSSFilterDefaultValue,
   ImageType extends TProcessableImageType = TProcessableImageType> =
-  <Image extends TProcessableImage>(
-    image: Image,
+  (
+    image: ImageData,
     value: Value,
     type: ImageType,
-  ) => Image;
+  ) => ImageData;
 
 /**
  * CSS filter default value's default type.
@@ -55,9 +53,9 @@ export interface ICSSFilter<Value = TCSSFilterDefaultValue,
    * @param settings
    * @returns {T}
    */
-  applyTo<Image extends TCSSFilterApplyToImage>(
-    image: Image,
+  applyTo(
+    image: ImageData,
     value: Value,
     settings: IApplyToSettings<ImageType>,
-  ): Image;
+  ): ImageData;
 }

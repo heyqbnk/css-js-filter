@@ -71,5 +71,8 @@
     "src/**/*.ts": [
       "eslint --fix"
     ]
+  },
+  "dependencies": {
+    "stackblur-canvas": "^2.4.0"
   }
 }

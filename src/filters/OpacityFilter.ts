@@ -8,9 +8,10 @@ export const OpacityFilter = createCSSFilter<number, 'rgba'>({
   name: 'OpacityFilter',
   processImage: (image, value, type) => {
     const multiplier = value / 100;
+    const {data} = image;
 
-    for (let i = 3; i < image.length; i += 4) {
-      image[i] = ColorsFilter.opacify(image[i], multiplier);
+    for (let i = 3; i < data.length; i += 4) {
+      data[i] = ColorsFilter.opacify(data[i], multiplier);
     }
     return image;
   },
