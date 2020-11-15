@@ -163,4 +163,22 @@ const Inst1977CSSFilter = createCSSFilter({
     return image;
   },
 });
-``` 
+```
+
+## Preview
+
+Firstly, clone repository:
+
+```bash
+git clone git@github.com:wolframdeus/css-js-filter.git
+```
+
+After, when repository is cloned, install all dependencies:
+```bash
+yarn install
+```
+
+Finally, run preview and go to http://localhost:9000 :
+```bash
+yarn dev:browser
+```
