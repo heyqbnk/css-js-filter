@@ -9,6 +9,7 @@ import {
   HueRotationFilter,
   GrayscaleFilter,
 } from '../../src';
+import {OpacityFilter} from '../../src/filters/OpacityFilter';
 
 type TTitle = string;
 type TMin = number;
@@ -22,6 +23,7 @@ const filters: [ICSSFilter, TTitle, TMin, TMax, TValue][] = [
   [HueRotationBrowserFilter, 'Hue rotation (browser)', 0, 360, 0],
   [HueRotationFilter, 'Hue rotation (original)', 0, 360, 0],
   [GrayscaleFilter, 'Grayscale', 0, 100, 0],
+  [OpacityFilter, 'Opacity', 0, 100, 100],
 ];
 
 /**
@@ -44,7 +46,7 @@ function redraw(canvas: HTMLCanvasElement, type: 'css' | 'js') {
       if (Filter.isDefault(value)) {
         return;
       }
-      Filter.applyTo(imageData, value);
+      Filter.applyTo(imageData, value, {type: 'rgba'});
     });
     context.putImageData(imageData, 0, 0);
   } else {
@@ -63,6 +65,8 @@ function redraw(canvas: HTMLCanvasElement, type: 'css' | 'js') {
  * Creates onChange handler for input.
  * @param {ICSSFilter} filter
  * @param currentValueBlock
+ * @param canvas
+ * @param type
  * @returns {(ev: Event) => void}
  */
 function createOnFilterChange(

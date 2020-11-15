@@ -260,4 +260,14 @@ export class ColorsFilter {
       this.brightenComponent(b, multiplier),
     ];
   }
+
+  /**
+   * Opacifies pixel component.
+   * @param {number} a
+   * @param {number} multiplier
+   * @returns {number}
+   */
+  static opacify(a: number, multiplier: number): number {
+    return this.adjustComponent(a * multiplier);
+  }
 }

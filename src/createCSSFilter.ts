@@ -1,7 +1,7 @@
 import {
   IApplyToSettings,
   ICSSFilter,
-  TCSSFilterApplyToImage, TCSSFilterDefaultValue,
+  TCSSFilterApplyToImage, TCSSFilterDefaultValue, TProcessableImageType,
   TProcessImageFunc,
 } from './types';
 import {getBytesCount} from './utils';
@@ -22,7 +22,7 @@ type TDefaultValueMixin<V = TCSSFilterDefaultValue> = {
   isDefault(value: V): boolean;
 }
 
-type TGetCSSFilter<V = TCSSFilterDefaultValue> = {
+type TGetCSSFilterMixin<V = TCSSFilterDefaultValue> = {
   /**
    * CSS filter function name. For example: hue-rotate, contrast
    * brightness, etc.
@@ -44,8 +44,9 @@ type TGetCSSFilter<V = TCSSFilterDefaultValue> = {
   getCSSFilter(value: V): string;
 }
 
-type TOptions<V = TCSSFilterDefaultValue> = TDefaultValueMixin<V>
-  & TGetCSSFilter<V>
+type TOptions<Value = TCSSFilterDefaultValue, ImageType extends TProcessableImageType = TProcessableImageType> =
+  & TDefaultValueMixin<Value>
+  & TGetCSSFilterMixin<Value>
   & {
   /**
    * Filter class name.
@@ -55,7 +56,7 @@ type TOptions<V = TCSSFilterDefaultValue> = TDefaultValueMixin<V>
   /**
    * Function which processes image pixels and applies filter logic.
    */
-  processImage: TProcessImageFunc<V>;
+  processImage: TProcessImageFunc<Value, ImageType>;
 };
 
 /**
@@ -63,27 +64,28 @@ type TOptions<V = TCSSFilterDefaultValue> = TDefaultValueMixin<V>
  * @param {IOptions} options
  * @returns {ICSSFilter}
  */
-export function createCSSFilter<V = TCSSFilterDefaultValue>(
-  options: TOptions<V>,
-): ICSSFilter<V> {
+export function createCSSFilter<Value = TCSSFilterDefaultValue, 
+  ImageType extends TProcessableImageType = TProcessableImageType>(
+  options: TOptions<Value, ImageType>,
+): ICSSFilter<Value, ImageType> {
   const {name, processImage} = options;
 
   const getCSSFilter = 'getCSSFilter' in options
     ? options.getCSSFilter
-    : (value: V) => {
+    : (value: Value) => {
       const {cssFunctionName, cssFunctionValuePostfix} = options;
 
       return `${cssFunctionName}(${value}${cssFunctionValuePostfix})`;
     };
   const isDefault = 'isDefault' in options
     ? options.isDefault
-    : (value: V) => options.defaultValue === value;
+    : (value: Value) => options.defaultValue === value;
 
-  function applyTo(image: ImageData, value: V, settings?: IApplyToSettings): ImageData;
-  function applyTo(image: Uint8ClampedArray, value: V, settings?: IApplyToSettings): Uint8ClampedArray;
-  function applyTo(image: number[], value: V, settings?: IApplyToSettings): number[];
-  function applyTo(image: TCSSFilterApplyToImage, value: V, settings: IApplyToSettings = {}): any {
-    const {type = 'rgba'} = settings;
+  function applyTo(image: ImageData, value: Value, settings: IApplyToSettings<ImageType>): ImageData;
+  function applyTo(image: Uint8ClampedArray, value: Value, settings: IApplyToSettings<ImageType>): Uint8ClampedArray;
+  function applyTo(image: number[], value: Value, settings: IApplyToSettings<ImageType>): number[];
+  function applyTo(image: TCSSFilterApplyToImage, value: Value, settings: IApplyToSettings<ImageType>): any {
+    const {type} = settings;
     let data = image instanceof ImageData
       ? image.data
       : image;

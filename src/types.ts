@@ -2,47 +2,51 @@ export type TProcessableImage = Uint8ClampedArray | number[];
 export type TCSSFilterApplyToImage = Uint8ClampedArray | ImageData | number[];
 export type TProcessableImageType = 'rgb' | 'rgba';
 
-export interface IApplyToSettings {
+export interface IApplyToSettings<Type extends TProcessableImageType = TProcessableImageType> {
   /**
    * Defines passed image type. So, when filter is applied to image, it
    * should modify specific bytes. Passing image type defines which bytes
    * should be modified.
-   * @default 'rgba'
    */
-  type?: TProcessableImageType;
+  type: Type;
 }
 
 /**
  * Function which applies filter to image.
  */
-export type TProcessImageFunc<V = TCSSFilterDefaultValue> =
-  <T extends TProcessableImage>(
-    image: T,
-    value: V,
-    type: TProcessableImageType,
-  ) => T;
+export type TProcessImageFunc<Value = TCSSFilterDefaultValue,
+  ImageType extends TProcessableImageType = TProcessableImageType> =
+  <Image extends TProcessableImage>(
+    image: Image,
+    value: Value,
+    type: ImageType,
+  ) => Image;
 
 /**
- * CSS filter default value default type.
+ * CSS filter default value's default type.
  */
 export type TCSSFilterDefaultValue = number;
 
-export interface ICSSFilter<V = TCSSFilterDefaultValue> {
+/**
+ * Describes any CSS filter which could be used in CSS's filter property.
+ */
+export interface ICSSFilter<Value = TCSSFilterDefaultValue, 
+  ImageType extends TProcessableImageType = TProcessableImageType> {
   /**
    * Returns CSS filter function applied to passed value. As a result,
    * it should return something like "brightness(50%)". So, it could be used
    * in CSS's "filter" property.
-   * @param {V} value
+   * @param {Value} value
    * @returns {string}
    */
-  getCSSFilter(value: V): string;
+  getCSSFilter(value: Value): string;
 
   /**
    * States if passed value is default for this filter.
-   * @param {V} value
+   * @param {Value} value
    * @returns {boolean}
    */
-  isDefault(value: V): boolean;
+  isDefault(value: Value): boolean;
 
   /**
    * Applies filter to pixel or set of RGB/RGBA pixels. To make it more
@@ -51,9 +55,9 @@ export interface ICSSFilter<V = TCSSFilterDefaultValue> {
    * @param settings
    * @returns {T}
    */
-  applyTo<T extends TCSSFilterApplyToImage>(
-    image: T,
-    value: V,
-    settings?: IApplyToSettings,
-  ): T;
+  applyTo<Image extends TCSSFilterApplyToImage>(
+    image: Image,
+    value: Value,
+    settings: IApplyToSettings<ImageType>,
+  ): Image;
 }
