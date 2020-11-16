@@ -1,28 +1,26 @@
 import {
-  IApplyToSettings,
   ICSSFilter,
-  TCSSFilterDefaultValue, TProcessableImageType,
+  TProcessableImageType,
   TProcessImageFunc,
 } from './types';
-import {getBytesCount} from './utils';
 
-type TDefaultValueMixin<V = TCSSFilterDefaultValue> = {
+type TDefaultValueMixin = {
   /**
    * Default value or values for this filter. For example, if its brightness
    * filter, default value is 100 because by default images has 100%
    * brightness.
    */
-  defaultValue: V;
+  defaultValue: number;
 } | {
   /**
    * Overrides isDefault method.
-   * @param {V} value
+   * @param {number} value
    * @returns {boolean}
    */
-  isDefault(value: V): boolean;
+  isDefault(value: number): boolean;
 }
 
-type TGetCSSFilterMixin<V = TCSSFilterDefaultValue> = {
+type TGetCSSFilterMixin = {
   /**
    * CSS filter function name. For example: hue-rotate, contrast
    * brightness, etc.
@@ -38,15 +36,15 @@ type TGetCSSFilterMixin<V = TCSSFilterDefaultValue> = {
   /**
    * Returns CSS filter text representation, which could be used as
    * CSS's filter property.
-   * @param {V} value
+   * @param {number} value
    * @returns {string}
    */
-  getCSSFilter(value: V): string;
+  getCSSFilter(value: number): string;
 }
 
-type TOptions<Value = TCSSFilterDefaultValue, ImageType extends TProcessableImageType = TProcessableImageType> =
-  & TDefaultValueMixin<Value>
-  & TGetCSSFilterMixin<Value>
+type TOptions<ImageType extends TProcessableImageType = TProcessableImageType> =
+  & TDefaultValueMixin
+  & TGetCSSFilterMixin
   & {
   /**
    * Filter class name.
@@ -56,7 +54,7 @@ type TOptions<Value = TCSSFilterDefaultValue, ImageType extends TProcessableImag
   /**
    * Function which processes image pixels and applies filter logic.
    */
-  processImage: TProcessImageFunc<Value, ImageType>;
+  processImage: TProcessImageFunc<ImageType>;
 };
 
 /**
@@ -64,41 +62,24 @@ type TOptions<Value = TCSSFilterDefaultValue, ImageType extends TProcessableImag
  * @param {IOptions} options
  * @returns {ICSSFilter}
  */
-export function createCSSFilter<Value = TCSSFilterDefaultValue, 
-  ImageType extends TProcessableImageType = TProcessableImageType>(
-  options: TOptions<Value, ImageType>,
-): ICSSFilter<Value, ImageType> {
+export function createCSSFilter<ImageType extends TProcessableImageType = TProcessableImageType>(
+  options: TOptions<ImageType>,
+): ICSSFilter<ImageType> {
   const {name, processImage} = options;
 
   const getCSSFilter = 'getCSSFilter' in options
     ? options.getCSSFilter
-    : (value: Value) => {
+    : (value: number) => {
       const {cssFunctionName, cssFunctionValuePostfix} = options;
 
       return `${cssFunctionName}(${value}${cssFunctionValuePostfix})`;
     };
   const isDefault = 'isDefault' in options
     ? options.isDefault
-    : (value: Value) => options.defaultValue === value;
-
-  function applyTo(image: ImageData, value: Value, settings: IApplyToSettings<ImageType>): ImageData {
-    const {type} = settings;
-
-    if (image.data.length % getBytesCount(type)) {
-      throw new Error(
-        'Entity is corrupted. Choose another entity type or check ' +
-        'entity itself',
-      );
-    }
-
-    // Process image data.
-    processImage(image, value, type);
-
-    return image;
-  }
+    : (value: number) => options.defaultValue === value;
 
   class CSSFilter {
-    static applyTo = applyTo;
+    static processImage = processImage;
     static getCSSFilter = getCSSFilter;
     static isDefault = isDefault;
   }

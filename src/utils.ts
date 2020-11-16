@@ -59,18 +59,63 @@ export function forEachPixel(
   }
 }
 
+export function _forEachPixel(
+  image: ImageData,
+  type: TProcessableImageType,
+  f: (from: number, to: number) => any,
+) {
+  const {data} = image;
+  const bytesCount = getBytesCount(type);
+  const stepsCount = Math.floor(data.length / bytesCount);
+
+  for (let i = 0; i < stepsCount; i++) {
+    f.call(f, i, i + bytesCount);
+  }
+}
+
 /**
  * Changes pixel in image.
  * @param {ImageData} image
+ * @param type
  * @param {number} from
- * @param {number[]} components
+ * @param {number[]} componentsOrData
  */
 export function assignPixel(
   image: ImageData,
+  type: TProcessableImageType,
   from: number,
-  components: number[]
+  componentsOrData: number[] | ImageData
 ) {
-  for (let i = 0; i < components.length; i++) {
+  const components = componentsOrData instanceof ImageData
+    ? componentsOrData.data
+    : componentsOrData;
+  const bytesCount = getBytesCount(type);
+  const length = Math.min(components.length, bytesCount);
+
+  for (let i = 0; i < length; i++) {
+    image.data[from + i] = components[i];
+  }
+}
+
+/**
+ * Changes pixel in image.
+ * @param {ImageData} image
+ * @param type
+ * @param {number} from
+ * @param {number[]} componentsOrData
+ */
+export function _assignPixel(
+  image: ImageData,
+  type: TProcessableImageType,
+  from: number,
+  componentsOrData: number[] | ImageData
+) {
+  const components = componentsOrData instanceof ImageData
+    ? componentsOrData.data
+    : componentsOrData;
+  const bytesCount = getBytesCount(type);
+
+  for (let i = 0; i < bytesCount; i++) {
     image.data[from + i] = components[i];
   }
 }

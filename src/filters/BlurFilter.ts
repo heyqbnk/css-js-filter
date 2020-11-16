@@ -6,10 +6,14 @@ export const BlurFilter = createCSSFilter({
   cssFunctionValuePostfix: 'px',
   defaultValue: 0,
   name: 'BlurFilter',
-  processImage(image, radius, type) {
+  processImage(options) {
+    const {value, type, image, from, to} = options;
+
     if (type === 'rgba') {
-      return imageDataRGBA(image, 0, 0, image.width, image.height, radius * 2);
+      // FIXME
+      return imageDataRGBA(image, 0, 0, image.width, image.height, value * 2);
     }
-    return imageDataRGB(image, 0, 0, image.width, image.height, radius * 2);
+    // FIXME
+    return imageDataRGB(image, 0, 0, image.width, image.height, value * 2);
   },
 });

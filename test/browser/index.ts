@@ -12,12 +12,26 @@ import {
   InversionFilter,
   BlurFilter,
 } from '../../src';
+import {composeCSSFilters} from '../../src';
+
+
+// Remember instagram filter definition. Its order is important:
+// sepia(.5) hue-rotate(-30deg) saturate(1.4)
+const Inst1977CSSFilter = composeCSSFilters({
+  name: 'Inst1977CSSFilter',
+  filters: [
+    [SepiaFilter, 50],
+    [HueRotationBrowserFilter, -30],
+    [SaturationFilter, 140],
+  ],
+});
 
 type TTitle = string;
 type TMin = number;
 type TMax = number;
 type TValue = number;
-const filters: [ICSSFilter, TTitle, TMin, TMax, TValue][] = [
+type TFilter = [ICSSFilter, TTitle, TMin, TMax, TValue];
+const defaultFilters: TFilter[] = [
   [BrightnessFilter, 'Brightness', 0, 200, 100],
   [ContrastFilter, 'Contrast', 0, 200, 100],
   [SaturationFilter, 'Saturation', 0, 200, 100],
@@ -29,6 +43,12 @@ const filters: [ICSSFilter, TTitle, TMin, TMax, TValue][] = [
   [InversionFilter, 'Inversion', 0, 100, 0],
   [BlurFilter, 'Blur', 0, 100, 0],
 ];
+
+const instFilters: TFilter[] = [
+  [Inst1977CSSFilter, '1977', 0, 100, 0],
+];
+
+const filters = [...defaultFilters, ...instFilters];
 
 /**
  * Redraws canvas with image and filters.
@@ -44,15 +64,15 @@ function redraw(canvas: HTMLCanvasElement, type: 'css' | 'js') {
   context.drawImage(image, 0, 0, canvas.width, canvas.height);
 
   if (type === 'js') {
-    const imageData = context.getImageData(0, 0, canvas.width, canvas.height);
+    const image = context.getImageData(0, 0, canvas.width, canvas.height);
 
     filters.forEach(([Filter, , , , value]) => {
       if (Filter.isDefault(value)) {
         return;
       }
-      Filter.applyTo(imageData, value, {type: 'rgba'});
+      Filter.processImage({image, type: 'rgba', value});
     });
-    context.putImageData(imageData, 0, 0);
+    context.putImageData(image, 0, 0);
   } else {
     canvas.style.filter = filters
       .reduce<string[]>((acc, [Filter, , , , value]) => {
@@ -77,7 +97,7 @@ function createOnFilterChange(
   filter: ICSSFilter,
   currentValueBlock: HTMLDivElement,
   canvas: HTMLCanvasElement,
-  type: 'css' | 'js'
+  type: 'css' | 'js',
 ) {
   return (ev: Event) => {
     const f = filters.find(f => f[0] === filter);
@@ -105,6 +125,7 @@ function createFilter(
   min: number,
   max: number,
   value: number,
+  type: 'default' | 'instagram',
 ) {
   const label = document.createElement('label');
   label.className = 'filter';
@@ -131,19 +152,29 @@ function createFilter(
   input.value = value.toString();
   input.type = 'range';
   input.onchange = createOnFilterChange(filter, current, jsCanvas, 'js');
-  input.oninput = createOnFilterChange(filter, current,  cssCanvas, 'css');
+  input.oninput = createOnFilterChange(filter, current, cssCanvas, 'css');
 
   label.append(titleBlock, input, rangesBlock);
-  filtersBlock.append(label);
+
+  if (type === 'default') {
+    defaultFiltersBlock.append(label);
+  } else {
+    instFiltersBlock.append(label);
+  }
 }
 
 const cssCanvas = document.getElementById('css-canvas') as HTMLCanvasElement;
 const jsCanvas = document.getElementById('js-canvas') as HTMLCanvasElement;
-const filtersBlock = document.getElementById('filters') as HTMLDivElement;
+const defaultFiltersBlock = document.getElementById('default-filters') as HTMLDivElement;
+const instFiltersBlock = document.getElementById('inst-filters') as HTMLDivElement;
 
 // Create filters.
-filters.forEach(([filter, title, min, max, value]) => {
-  createFilter(filter, title, min, max, value);
+defaultFilters.forEach(([filter, title, min, max, value]) => {
+  createFilter(filter, title, min, max, value, 'default');
+});
+
+instFilters.forEach(([filter, title, min, max, value]) => {
+  createFilter(filter, title, min, max, value, 'instagram');
 });
 
 const image = new Image();
@@ -151,5 +182,5 @@ image.src = imageUrl;
 image.onload = () => {
   redraw(cssCanvas, 'css');
   redraw(jsCanvas, 'js');
-}
+};
 

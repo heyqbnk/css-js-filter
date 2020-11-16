@@ -24,7 +24,7 @@ body {
     z-index: 1;
 }
 
-#filters {
+.filters {
     display: flex;
     align-items: center;
     flex-wrap: wrap;
